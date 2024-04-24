@@ -1,0 +1,4 @@
+mypy
+black
+pylint
+pytest
