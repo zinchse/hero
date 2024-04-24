@@ -8,7 +8,7 @@ HINTS = [
     "Seq Scan",
 ]
 
-GUQS = [
+GUCS = [
     "nestloop",
     "mergejoin",
     "hashjoin",
