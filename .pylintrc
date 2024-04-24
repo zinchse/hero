@@ -1,0 +1,6 @@
+[MASTER]
+disable=C0115, W1514, C0116
+
+[MESSAGES CONTROL]
+disable=C0114, C0115
+
