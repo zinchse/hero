@@ -1,13 +1,13 @@
 import os
 import pytest
+from code.datasets.config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
 from code.datasets.types import Plans
-from tests.conftest import (
-    PATH_TO_DATASET,
-    BENCH_NAME_TO_EXPECTED_SIZE,
-    EXPECTED_QUERY_DATA_SIZE,
-    EXPECTED_BENCHS,
-)
 import json
+
+PATH_TO_DATASET = "data/raw"
+EXPECTED_BENCHS = BENCH_NAMES
+EXPECTED_QUERY_DATA_SIZE = len(DOPS) * len(HINTSETS)
+BENCH_NAME_TO_EXPECTED_SIZE = BENCH_NAME_TO_SIZE
 
 
 @pytest.mark.parametrize("bench_name", [bench_name for bench_name in EXPECTED_BENCHS])
