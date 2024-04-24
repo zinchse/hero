@@ -1,8 +1,11 @@
 import os
-import pytest
-from code.datasets.config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
-from code.datasets.types import Plans
 import json
+
+from code.datasets.config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
+from code.datasets.data_types import Plans
+
+import pytest
+
 
 PATH_TO_DATASET = "data/raw"
 EXPECTED_BENCHS = BENCH_NAMES
@@ -10,12 +13,12 @@ EXPECTED_QUERY_DATA_SIZE = len(DOPS) * len(HINTSETS)
 BENCH_NAME_TO_EXPECTED_SIZE = BENCH_NAME_TO_SIZE
 
 
-@pytest.mark.parametrize("bench_name", [bench_name for bench_name in EXPECTED_BENCHS])
+@pytest.mark.parametrize("bench_name", EXPECTED_BENCHS)
 def test_existence(bench_name: str):
     assert bench_name in os.listdir(PATH_TO_DATASET), f"Can't find {bench_name} dataset at {PATH_TO_DATASET}"
 
 
-@pytest.mark.parametrize("bench_name", [bench_name for bench_name in EXPECTED_BENCHS])
+@pytest.mark.parametrize("bench_name", EXPECTED_BENCHS)
 def test_sizes(bench_name: str):
     path_to_bench = f"{PATH_TO_DATASET}/{bench_name}"
 
@@ -34,7 +37,7 @@ def test_sizes(bench_name: str):
             ), f"Data size for {query_file} is {real_query_data_size} but expected {expected_query_data_size}"
 
 
-@pytest.mark.parametrize("bench_name", [bench_name for bench_name in EXPECTED_BENCHS])
+@pytest.mark.parametrize("bench_name", EXPECTED_BENCHS)
 def test_plans(bench_name: str):
     path_to_bench = f"{PATH_TO_DATASET}/{bench_name}"
     for query_file in os.listdir(path_to_bench):
