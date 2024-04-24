@@ -21,7 +21,7 @@ jobs:
 
     - name: formatting
       run: |
-        black --check .
+        black --check --line-length 120 .
 
     - name: type checking
       run: |
