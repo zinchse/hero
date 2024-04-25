@@ -1,7 +1,7 @@
 import os
 import json
 
-from code.datasets.config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
+from code.datasets.data_config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
 from code.datasets.data_types import Plans
 
 import pytest
