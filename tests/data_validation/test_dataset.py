@@ -1,13 +1,13 @@
 import os
 import json
 
-from code.datasets.data_config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
-from code.datasets.data_types import Plans
-
 import pytest
 
+from src.datasets.data_config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
+from src.datasets.data_types import Plans
 
-PATH_TO_DATASET = "data/raw"
+
+PATH_TO_DATASET = "data/processed"
 EXPECTED_BENCHS = BENCH_NAMES
 EXPECTED_QUERY_DATA_SIZE = len(DOPS) * len(HINTSETS)
 BENCH_NAME_TO_EXPECTED_SIZE = BENCH_NAME_TO_SIZE
