@@ -13,13 +13,6 @@ from src.datasets.data_types import (
     Plans,
 )
 
-
-class OracleRequest(BaseModel):
-    query_name: "QueryName"
-    dop: "QueryDop"
-    hintset: "HintsetCode"
-
-
 TIMEOUT = float(2**42)
 
 
@@ -35,6 +28,12 @@ def _load_benchmark_data(path_to_bench: "str") -> "Dict[QueryName, QueryData]":
                 query_data[settings] = Plans(**query_data[settings])
             benchmark_data[query_name] = query_data
     return benchmark_data
+
+
+class OracleRequest(BaseModel):
+    query_name: "QueryName"
+    dop: "QueryDop"
+    hintset: "HintsetCode"
 
 
 class Oracle:
