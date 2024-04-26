@@ -22,7 +22,7 @@ jobs:
     - name: raw data extracting
       run: |
         sudo apt-get install -y p7zip-full
-        7za x data/raw/raw_data.7z -o/data/raw
+        7za x data/raw/raw_data.7z -o data/raw
     
     - name: raw data processing
       run: |
