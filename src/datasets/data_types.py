@@ -34,7 +34,7 @@ class ExplainPlan(BaseModel):
     planning_time: "Time" = Field(alias="Planner Runtime")
 
 
-class ExplainAnalyzePlan(BaseModel):
+class ExplainAnalyzePlan(ExplainPlan):
     plan: "ExplainAnalyzeNode" = Field(alias="Plan")
     execution_time: "Time" = Field(alias="Total Runtime")
 
@@ -45,4 +45,3 @@ class Plans(BaseModel):
 
 
 QueryData = Dict[Settings, Plans]
-BenchmarkData = Dict[QueryName, QueryData]
