@@ -6,5 +6,5 @@ ignore=venv,.venv
 max-line-length=120
 
 [MESSAGES CONTROL]
-disable=C0114, C0115
+disable=C0114, C0115, W1514, C0116
 
