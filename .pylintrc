@@ -1,6 +1,10 @@
 [MASTER]
 disable=C0115, W1514, C0116
+ignore=venv,.venv
+
+[FORMAT]
+max-line-length=120
 
 [MESSAGES CONTROL]
-disable=C0114, C0115
+disable=C0114, C0115, W1514, C0116
 
