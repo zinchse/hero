@@ -1,10 +1,8 @@
 import os
 import json
-
+import pytest
 from src.datasets.data_config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
 from src.datasets.data_types import Plans
-
-import pytest
 
 
 PATH_TO_DATASET = "data/raw"
