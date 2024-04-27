@@ -1,7 +1,7 @@
 import os
 import json
 
-from src.datasets.config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
+from src.datasets.data_config import DOPS, HINTSETS, BENCH_NAME_TO_SIZE, BENCH_NAMES
 from src.datasets.data_types import Plans
 
 import pytest
