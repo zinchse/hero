@@ -59,5 +59,9 @@ if __name__ == "__main__":
     else:
         for name in BENCH_NAMES:
             print(f"Processing raw data from '{name}' has been started")
-            process_raw_data(path_to_processed="data/processed", path_to_raw="data/raw", bench_name=name)
+            process_raw_data(
+                path_to_processed="data/processed",
+                path_to_raw="data/raw",
+                bench_name=name,
+            )
             print(f"Raw data for '{name}' has been processed")
