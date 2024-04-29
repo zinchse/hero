@@ -24,11 +24,14 @@ def test_stucture(bench_name: str):
 
     expected_bench_size = BENCH_NAME_TO_EXPECTED_SIZE[bench_name]
     found_sqls = [f for f in os.listdir(path_to_bench) if f.endswith(".json")]
-    assert len(found_sqls) == expected_bench_size, f"Found {len(found_sqls)} queries, but expected {expected_size}"
+    assert (
+        len(found_sqls) == expected_bench_size
+    ), f"Expected # queries is {expected_bench_size}, real {len(found_sqls)}"
 
     for query_file in os.listdir(path_to_bench):
         if not query_file.endswith(".json"):
             continue
+
         with open(f"{path_to_bench}/{query_file}", "r") as query_data_file:
             expected_query_data_size = EXPECTED_QUERY_DATA_SIZE
             query_data = json.load(query_data_file)
