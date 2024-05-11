@@ -18,7 +18,7 @@ Settings = str  # str((query_dop, hintset_code))
 
 class ExplainNode(BaseModel):
     node_type: "NodeType" = Field(alias="Node Type")
-    plans: "Optional[List[ExplainNode]]" = Field(default=[], alias="Plans")
+    plans: "List[ExplainNode]" = Field(default=[], alias="Plans")
     estimated_cardinality: "Cardinality" = Field(alias="Plan Rows")
     index_name: "Optional[RelationName]" = Field(default=None, alias="Index Name")
     relation_name: "Optional[RelationName]" = Field(default=None, alias="Relation Name")
