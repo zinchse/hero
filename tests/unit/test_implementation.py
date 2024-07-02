@@ -7,12 +7,11 @@ from src.models.binary_tree_layers import (
     BinaryTreeLayerNorm,
     BinaryTreeInstanceNorm,
     InvalidShapeError,
-    VERTICES_DIM,
     NEIGHBORHOOD_SIZE,
     _check_shapes,
 )
 import torch
-from torch import nn, Tensor
+from torch import Tensor
 
 
 @pytest.fixture

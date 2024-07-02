@@ -1,6 +1,5 @@
-import pytest
 import torch
-from torch import nn, Tensor
+from torch import Tensor
 
 
 def test_example_convolution(convolved_vertices: "Tensor"):
@@ -28,6 +27,6 @@ def test_example_instance_normalization(vertices: "Tensor", instance_normalized_
     assert torch.allclose(instance_normalized_vertices, expected_ans)
 
 
-def test_example_full_block(vertices: "Tensor", edges: "Tensor", full_block_processed_vertices: "Tensor"):
+def test_example_full_block(full_block_processed_vertices: "Tensor"):
     expected_ans = torch.tensor([[4.5 / 2.598076211353316]])
     assert torch.allclose(full_block_processed_vertices, expected_ans)
