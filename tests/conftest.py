@@ -1,17 +1,10 @@
 import sys
 import os
+
 sys.path.insert(0, os.getcwd())
 
-from typing import List, Tuple, cast
+from typing import cast
 import pytest
-from src.models.binary_tree_layers import (
-    BinaryTreeActivation,
-    BinaryTreeAdaptivePooling,
-    BinaryTreeSequential,
-    BinaryTreeConv,
-    BinaryTreeLayerNorm,
-    BinaryTreeInstanceNorm,
-)
 import torch
 from torch import nn, Tensor
 

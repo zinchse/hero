@@ -1,13 +1,4 @@
-from typing import List, Tuple, cast
 import pytest
-from src.models.binary_tree_layers import (
-    BinaryTreeActivation,
-    BinaryTreeAdaptivePooling,
-    BinaryTreeSequential,
-    BinaryTreeConv,
-    BinaryTreeLayerNorm,
-    BinaryTreeInstanceNorm,
-)
 import torch
 from torch import nn, Tensor
 
