@@ -77,12 +77,12 @@ def convolved_vertices(
 
 @pytest.fixture
 def activated_vertices(vertices: "Tensor") -> "Tensor":
-    return torch.tensor((max(0, v[c]) for c in range(2)) for v in vertices)
+    return torch.tensor([[max(0, v[c]) for c in range(2)] for v in vertices])
 
 
 @pytest.fixture
 def pooled_vertices(vertices: "Tensor") -> "Tensor":
-    return torch.tensor(max(v[c] for v in vertices) for c in range(2))
+    return torch.tensor([max(v[c] for v in vertices) for c in range(2)])
 
 
 @pytest.fixture
@@ -99,4 +99,4 @@ def instance_normalized_vertices(vertices: "Tensor") -> "Tensor":
 def full_block_processed_vertices(convolved_vertices: "Tensor") -> "Tensor":
     normalized_vertices = (convolved_vertices - convolved_vertices.mean()) / convolved_vertices.std(unbiased=False)
     activated_vertices = torch.tensor([[max(0, v[c]) for c in range(1)] for v in normalized_vertices])
-    return torch.tensor([max(v[c] for v in activated_vertices) for c in range(1)])
+    return torch.tensor([[max(v[c] for v in activated_vertices)] for c in range(1)])
