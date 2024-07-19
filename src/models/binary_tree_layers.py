@@ -119,7 +119,6 @@ class BinaryTreeLayerNorm(nn.Module):
             self.gamma.requires_grad = False
             self.beta.requires_grad = False
         
-
     def forward(self, vertices: "Tensor", edges: "Tensor") -> "Tensor":
         _check_shapes(in_channels=self.in_channels, vertices=vertices, edges=edges)
         mean = vertices.mean(dim=(1, 2), keepdim=True)
@@ -140,7 +139,6 @@ class BinaryTreeInstanceNorm(nn.Module):
         if frozen:
             self.gamma.requires_grad = False
             self.beta.requires_grad = False
-
 
     def forward(self, vertices: "Tensor", edges: "Tensor") -> "Tensor":
         _check_shapes(in_channels=self.in_channels, vertices=vertices, edges=edges)
