@@ -109,12 +109,16 @@ class BinaryTreeSequential(nn.Module):
 
 
 class BinaryTreeLayerNorm(nn.Module):
-    def __init__(self, in_channels: "int", eps: "float" = 1e-5):
+    def __init__(self, in_channels: "int", eps: "float" = 1e-5, frozen: "bool" = False):
         super().__init__()
         self.in_channels = in_channels
         self.gamma = nn.Parameter(torch.ones(in_channels))
         self.beta = nn.Parameter(torch.zeros(in_channels))
         self.eps = eps
+        if frozen:
+            self.gamma.requires_grad = False
+            self.beta.requires_grad = False
+        
 
     def forward(self, vertices: "Tensor", edges: "Tensor") -> "Tensor":
         _check_shapes(in_channels=self.in_channels, vertices=vertices, edges=edges)
@@ -127,12 +131,16 @@ class BinaryTreeLayerNorm(nn.Module):
 
 
 class BinaryTreeInstanceNorm(nn.Module):
-    def __init__(self, in_channels: "int", eps: "float" = 1e-5):
+    def __init__(self, in_channels: "int", eps: "float" = 1e-5, frozen: "bool" = False):
         super().__init__()
         self.in_channels = in_channels
         self.gamma = nn.Parameter(torch.ones(in_channels))
         self.beta = nn.Parameter(torch.zeros(in_channels))
-        self.eps = eps
+        self.eps = eps        
+        if frozen:
+            self.gamma.requires_grad = False
+            self.beta.requires_grad = False
+
 
     def forward(self, vertices: "Tensor", edges: "Tensor") -> "Tensor":
         _check_shapes(in_channels=self.in_channels, vertices=vertices, edges=edges)
