@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 Time = float
 Cardinality = int
 Selectivity = float
+Cost = float
 RelationName = str
 NodeType = str
 TemplateID = int
@@ -22,10 +23,12 @@ class ExplainNode(BaseModel):
     estimated_cardinality: "Cardinality" = Field(alias="Plan Rows")
     index_name: "Optional[RelationName]" = Field(default=None, alias="Index Name")
     relation_name: "Optional[RelationName]" = Field(default=None, alias="Relation Name")
+    cost: "Cost" = Field(alias="Total Cost")
 
 
 class ExplainAnalyzeNode(ExplainNode):
     real_cardinality: "Cardinality" = Field(alias="Actual Rows")
+    cost: "Cost" = Field(alias="Total Cost")
 
 
 class ExplainPlan(BaseModel):

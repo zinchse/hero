@@ -8,6 +8,7 @@ from src.datasets.data_types import (
     HintsetCode,
     QueryData,
     Time,
+    Cost,
     ExplainAnalyzePlan,
     ExplainPlan,
     Plans,
@@ -51,6 +52,10 @@ class Oracle:
     def get_planning_time(self, request: "OracleRequest") -> "Time":
         plans = self._get_plans(request=request)
         return plans.explain_plan.planning_time
+
+    def get_cost(self, request: "OracleRequest") -> "Cost":
+        plans = self._get_plans(request=request)
+        return plans.explain_plan.plan.cost
 
     def get_execution_time(self, request: "OracleRequest") -> "Time":
         plans = self._get_plans(request=request)
