@@ -15,6 +15,7 @@ from src.datasets.oracle import Oracle, OracleRequest
 
 MAX_TREE_LENGTH = 66  # hardcoded value
 
+
 def get_logical_plan(query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop") -> "str":
     request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
     plan = oracle.get_explain_plan(request=request)
