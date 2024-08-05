@@ -18,7 +18,7 @@ def _unify_actual_rows(root: "dict") -> "None":
     recurse(node=root)
 
 
-def process_raw_data(path_to_raw: "str", path_to_processed: "str", bench_name: "str"):
+def process_raw_data(path_to_raw: "str", path_to_processed: "str", bench_name: "str") -> "None":
     bench_data: "Dict[str, Dict[str, Dict]]" = {}
     for dop in DOPS:
         with open(f"{path_to_raw}/dop{dop}/{bench_name}.json", "r") as raw_data_file:

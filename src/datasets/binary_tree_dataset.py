@@ -1,42 +1,13 @@
+"""
+There's a minimal version of a dataloader that takes into account the structure of the tree
+ representation and the fact that they are very often repeated (as a result, a 
+ weighted dataset is considered) 
+"""
+
 from typing import List, Tuple, Dict
 import torch
 from torch import Tensor
 from torch.utils.data import Dataset
-
-
-class BinaryTreeDataset(Dataset):
-    """
-    An iterator over triples <tensor of vectorized tree nodes, tree structure, execution time>
-    with the ability to move data to the specified device.
-    """
-
-    def __init__(
-        self,
-        list_vertices: "List[Tensor]",
-        list_edges: "List[Tensor]",
-        list_time: "List[Tensor]",
-        device: "torch.device",
-    ):
-        sizes = set([len(list_vertices), len(list_edges), len(list_time)])
-        assert len(sizes) == 1, "The number of vertices, edges and times should be equal"
-        self.size = sizes.pop()
-        self.device = device
-        self.list_vertices = list_vertices
-        self.list_edges = list_edges
-        self.list_time = list_time
-        self.move_to_device()
-
-    def move_to_device(self) -> "None":
-        for idx in range(self.size):
-            self.list_vertices[idx] = self.list_vertices[idx].to(device=self.device)
-            self.list_edges[idx] = self.list_edges[idx].to(device=self.device)
-            self.list_time[idx] = self.list_time[idx].to(device=self.device)
-
-    def __getitem__(self, idx: "int") -> "Tuple[Tensor, Tensor, Tensor]":
-        return self.list_vertices[idx], self.list_edges[idx], self.list_time[idx]
-
-    def __len__(self) -> "int":
-        return self.size
 
 
 def paddify_sequences(sequences: "List[Tensor]", target_length: "int") -> "List[Tensor]":
@@ -50,24 +21,6 @@ def paddify_sequences(sequences: "List[Tensor]", target_length: "int") -> "List[
         padded_seq = torch.cat((seq, padding_tokens), dim=0)
         padded_sequences.append(padded_seq)
     return padded_sequences
-
-
-def binary_tree_collate(
-    batch: "List[Tuple[Tensor, Tensor, Tensor]]", target_length: "int"
-) -> "Tuple[Tuple[Tensor, Tensor], Tensor]":
-    """
-    Adds padding to equalize lengths, changes the number of axes and
-    their order to make neural network inference more suitable.
-    """
-    list_vertices, list_edges, list_time = [], [], []
-    for vertices, edges, time in batch:
-        list_vertices.append(vertices)
-        list_edges.append(edges)
-        list_time.append(time)
-    batch_vertices = torch.stack(paddify_sequences(list_vertices, target_length)).transpose(1, 2)
-    batch_edges = torch.stack(paddify_sequences(list_edges, target_length)).unsqueeze(1)
-    return (batch_vertices, batch_edges), torch.stack(list_time)
-
 
 class WeightedBinaryTreeDataset(Dataset):
     def __init__(
@@ -106,10 +59,10 @@ class WeightedBinaryTreeDataset(Dataset):
             self.list_frequencies[idx] = self.list_frequencies[idx].to(device=self.device)
             self.list_time[idx] = self.list_time[idx].to(device=self.device)
 
-    def __len__(self):
+    def __len__(self) -> "int":
         return self.size
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> "Tuple[Tensor, Tensor, Tensor, Tensor]":
         return self.list_vertices[idx], self.list_edges[idx], self.list_frequencies[idx], self.list_time[idx]
 
 
