@@ -1,4 +1,10 @@
+"""
+Definition of standard types of the most popular objects, advantage has been introduced 
+to give semantics and possibility of data validation through the pydantic.
+"""
+
 from typing import List, Optional, Dict
+from collections import namedtuple
 from pydantic import BaseModel, Field
 
 Time = float
@@ -14,7 +20,8 @@ QueryDop = int
 Hint = str
 HintsetCode = int
 GUC = str
-Settings = str  # str((query_dop, hintset_code))
+Settings = str  # str((query_dop, hintset_code)), we need it to simplify serialization
+Parameter = namedtuple("Parameter", ["hintset", "dop"])
 
 
 class ExplainNode(BaseModel):
