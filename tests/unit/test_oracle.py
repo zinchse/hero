@@ -1,32 +1,24 @@
-from typing import List, Tuple
-import pytest
+from typing import Dict
 from src.datasets.oracle import Oracle, OracleRequest
-from src.datasets.data_config import BENCH_NAMES, BENCH_NAME_TO_SIZE
-from src.datasets.data_types import ExplainAnalyzePlan, ExplainPlan, Time, QueryDop, HintsetCode, QueryName
+from src.datasets.data_config import BENCH_NAME_TO_SIZE
+from src.datasets.data_types import ExplainAnalyzePlan, ExplainPlan, Time, QueryName, Cost
 
 
-PATH_TO_DATASET: "str" = "data/processed"
-EXPECTED_BENCHS: "List[str]" = BENCH_NAMES
-TEST_DOP: "QueryDop" = 1
-TEST_HINTSET: "HintsetCode" = 42
-BENCH_QUERY_PAIRS: "List[Tuple[str, QueryName]]" = [
-    ("JOB", "1b"),
-    ("sample_queries", "q10_2a265"),
-    ("tpch_10gb", "q01"),
-]
-BENCH_NAME_TO_EXPECTED_SIZE = BENCH_NAME_TO_SIZE
+PATH_TO_DATA: "str" = "data/processed"
+BENCH_NAME_TO_EXAMPLE_QUERY: "Dict[str, QueryName]" = {
+    "JOB": "1b",
+    "sample_queries": "q10_2a265",
+    "tpch_10gb": "q01",
+}
 
 
-@pytest.mark.parametrize("bench_name, query_name", BENCH_QUERY_PAIRS)
-def test_emulator_functionality(bench_name: "str", query_name: "str"):
-    path_to_bench = f"{PATH_TO_DATASET}/{bench_name}"
-
-    oracle = Oracle(path_to_bench=path_to_bench)
-    oracle_request = OracleRequest(query_name=query_name, dop=TEST_DOP, hintset=TEST_HINTSET)
-
-    assert isinstance(oracle.get_query_names(), list)
-    assert len(oracle.get_query_names()) == BENCH_NAME_TO_EXPECTED_SIZE[bench_name]
-    assert isinstance(oracle.get_planning_time(request=oracle_request), Time)
-    assert isinstance(oracle.get_execution_time(request=oracle_request), Time)
-    assert isinstance(oracle.get_explain_analyze_plan(request=oracle_request), (type(None), ExplainAnalyzePlan))
-    assert isinstance(oracle.get_explain_plan(request=oracle_request), ExplainPlan)
+def test_types_and_sizes(oracles_dict: "Dict[str, Oracle]"):
+    for bench_name, oracle in [("tpch_10gb", Oracle(f"{PATH_TO_DATA}/tpch_10gb"))] + list(oracles_dict.items()):
+        oracle_request = OracleRequest(query_name=BENCH_NAME_TO_EXAMPLE_QUERY[bench_name], dop=1, hintset=42)
+        assert isinstance(oracle.get_query_names(), list)
+        assert len(oracle.get_query_names()) == BENCH_NAME_TO_SIZE[bench_name]
+        assert isinstance(oracle.get_planning_time(request=oracle_request), Time)
+        assert isinstance(oracle.get_execution_time(request=oracle_request), Time)
+        assert isinstance(oracle.get_explain_analyze_plan(request=oracle_request), (type(None), ExplainAnalyzePlan))
+        assert isinstance(oracle.get_explain_plan(request=oracle_request), ExplainPlan)
+        assert isinstance(oracle.get_cost(request=oracle_request), Cost)
