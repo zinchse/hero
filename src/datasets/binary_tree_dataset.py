@@ -22,6 +22,7 @@ def paddify_sequences(sequences: "List[Tensor]", target_length: "int") -> "List[
         padded_sequences.append(padded_seq)
     return padded_sequences
 
+
 class WeightedBinaryTreeDataset(Dataset):
     def __init__(
         self,
