@@ -1,3 +1,8 @@
+"""
+Key functions responsible for transforming plans into vectors, 
+with which the neural network will work in the future. 
+"""
+
 from typing import Dict, Tuple, List
 import math
 import torch
@@ -39,7 +44,7 @@ ALL_FEATURES = ALL_OPERATIONS + ["Cardinality", "Selectivity"]
 def node_to_features(node: "ExplainNode") -> "Dict[str, float]":
     features = {}
 
-    assert node.node_type in ALL_OPERATIONS
+    assert node.node_type in ALL_OPERATIONS, f"Unknown node type - {node.node_type}"
     for op in ALL_OPERATIONS:
         features[op] = float(op == node.node_type)
 
