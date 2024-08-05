@@ -3,10 +3,22 @@ import os
 
 sys.path.insert(0, os.getcwd())
 
-from typing import cast
+from typing import cast, Dict
 import pytest
 import torch
 from torch import nn, Tensor
+from src.datasets.oracle import Oracle
+from src.wrappers import ORACLES_DICT, initialize_oracles
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_oracles():
+    initialize_oracles(bench_names=["JOB", "sample_queries"])
+
+
+@pytest.fixture
+def oracles_dict() -> "Dict[str, Oracle]":
+    return ORACLES_DICT
 
 
 @pytest.fixture
