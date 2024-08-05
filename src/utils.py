@@ -1,29 +1,37 @@
-from typing import List, Tuple, Set, Dict
-import pandas as pd
+"""
+This module provides commonly used functions for processing of oracle's data 
+(for logical tree, cardinalities, and so on). Unlike the `wrapper.py`'s 
+functions, they require passing an oracle directly.
+
+It also contains a simple script to emulate the use of a NN in an online scenario.
+Note that the time calculation assumes that all predictors during the inference, 
+in addition to searching for parameters, **will also construct a corresponding plan**.
+"""
+
+from collections import defaultdict
+from typing import List, Tuple, TypedDict
 import torch
 from torch import Tensor
-from torch.utils.data import Dataset
-from src.datasets.data_types import (
-    QueryName,
-    QueryDop,
-    HintsetCode,
-    ExplainNode,
-)
-from src.datasets.binary_tree_dataset import paddify_sequences, WeightedBinaryTreeDataset
-from src.models.regressor import BinaryTreeRegressor
-from src.datasets.oracle import Oracle, OracleRequest
-
-MAX_TREE_LENGTH = 66  # hardcoded value
+from src.datasets.data_types import QueryName, QueryDop, HintsetCode, ExplainNode, Cardinality, Selectivity
+from src.datasets.binary_tree_dataset import paddify_sequences
+from src.datasets.oracle import Oracle, OracleRequest, TIMEOUT
+from src.datasets.vectorization import extract_vertices_and_edges
+from src.datasets.data_config import HINTSETS, DOPS, DEFAULT_HINTSET
+from src.config import MAX_TREE_LENGTH
 
 
-def get_logical_plan(query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop") -> "str":
+def get_logical_tree(
+    query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop", with_rels: "bool" = True
+) -> "str":
     request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
     plan = oracle.get_explain_plan(request=request)
-
     res = []
 
     def recurse(node: "ExplainNode") -> "None":
-        res.append(f"{node.node_type} (Rel={node.relation_name}|Index={node.index_name})")
+        if with_rels:
+            res.append(f"{node.node_type} (Rel={node.relation_name}|Index={node.index_name})")
+        else:
+            res.append(f"{node.node_type}")
         res.append("[")
         for child in node.plans:
             recurse(child)
@@ -33,16 +41,20 @@ def get_logical_plan(query_name: "QueryName", oracle: "Oracle", hintset: "Hintse
     return " ".join(res)
 
 
-def get_full_plan(query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop") -> "str":
+def get_full_plan(
+    query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop", with_rels: "bool" = True
+) -> "str":
     request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
     plan = oracle.get_explain_plan(request=request)
-
     res = []
 
     def recurse(node: "ExplainNode") -> "None":
-        res.append(
-            f"{node.node_type} (Rel={node.relation_name}|Index={node.index_name}|Cards={node.estimated_cardinality})"
-        )
+        node_type, cardinalities = node.node_type, node.estimated_cardinality
+        if with_rels:
+            rel_name, index_name = node.relation_name, node.index_name
+            res.append(f"{node_type} (Rel={rel_name}|Index={index_name}|Cards={cardinalities})")
+        else:
+            res.append(f"{node_type} (Cards={cardinalities})")
         res.append("[")
         for child in node.plans:
             recurse(child)
@@ -50,21 +62,13 @@ def get_full_plan(query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCo
 
     recurse(node=plan.plan)
     return " ".join(res)
-
-
-def get_template_id(query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop") -> "int":
-    def_request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
-    default_plan = oracle.get_explain_plan(request=def_request)
-    return default_plan.template_id
 
 
 def get_selectivities(
     query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop"
-) -> "List[float]":
-
+) -> "List[Selectivity]":
     request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
     plan = oracle.get_explain_plan(request=request)
-
     res = []
 
     def recurse(node: "ExplainNode") -> "None":
@@ -81,6 +85,22 @@ def get_selectivities(
     return res
 
 
+def get_cardinalities(
+    query_name: "QueryName", oracle: "Oracle", hintset: "HintsetCode", dop: "QueryDop"
+) -> "List[Cardinality]":
+    request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
+    plan = oracle.get_explain_plan(request=request)
+    res = []
+
+    def recurse(node: "ExplainNode") -> "None":
+        res.append(node.estimated_cardinality)
+        for child in node.plans:
+            recurse(child)
+
+    recurse(node=plan.plan)
+    return res
+
+
 def preprocess(v: "Tensor", e: "Tensor") -> "Tuple[Tensor, Tensor]":
     """unifies tensors from dataset with tensors from dataloader; see `weighted_binary_tree_collate`"""
     v, e = v.clone(), e.clone()
@@ -89,90 +109,71 @@ def preprocess(v: "Tensor", e: "Tensor") -> "Tuple[Tensor, Tensor]":
     return v, e
 
 
-def get_structure(v: "Tensor", e: "Tensor") -> "Tuple[str, str]":
-    """cleans cards (and selectivities) and returns hashable repr for v, e"""
-    v = v.clone()
-    v[-2:, :] = 0
-    return str(v.flatten().tolist()), str(e.flatten().tolist())
+class QueryInfo(TypedDict):
+    query_name: "QueryName"
+    hintset: "HintsetCode"
+    dop: "QueryDop"
+    vertices: "Tensor"
+    edges: "Tensor"
+    time: "Tensor"
 
 
-def get_tree(v: "Tensor", e: "Tensor") -> "Tuple[str, str]":
-    """returns hashable repr for v, e"""
-    v = v.clone()
-    return str(v.flatten().tolist()), str(e.flatten().tolist())
+def extract_list_info(oracle: "Oracle", query_names: "List[QueryName]") -> "List[QueryInfo]":
+    """initial plan processing and T/O handling with search for maximum lower bound of execution time"""
+    list_info = []
 
+    for query_name in query_names:
+        seen_logical_plans = set()
+        timeouted_logical_plans_to_dops = defaultdict(set)
+        timeouted_logical_plans_to_settings = defaultdict(list)
+        logical_plan_to_times = defaultdict(list)
 
-def load_run(
-    run: "int",
-    trainval_dataset: "Dataset",
-    model: "BinaryTreeRegressor",
-    ckpt_path: "str",
-    device: "torch.device",
-) -> "Tuple[BinaryTreeRegressor, Dataset, Dataset]":
-    generator = torch.Generator().manual_seed(42 + run - 1)
-    train_dataset, val_dataset = torch.utils.data.dataset.random_split(
-        trainval_dataset, [0.8, 0.2], generator=generator
-    )
-    ckpt_state = torch.load(ckpt_path, map_location=device)
-    model.load_state_dict(ckpt_state["model_state_dict"])
-    model = model.to(device)
-    return model, train_dataset, val_dataset
+        for dop in DOPS:
+            for hintset in HINTSETS:
+                custom_request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
+                custom_logical_plan = get_logical_tree(query_name=query_name, oracle=oracle, hintset=hintset, dop=dop)
+                custom_time = oracle.get_execution_time(custom_request)
+                if custom_time != TIMEOUT:
+                    time = torch.tensor(custom_time / 1000, dtype=torch.float32)
+                    vertices, edges = extract_vertices_and_edges(oracle.get_explain_plan(request=custom_request))
+                    seen_logical_plans.add(custom_logical_plan)
+                    info: "QueryInfo" = {
+                        "query_name": query_name,
+                        "hintset": hintset,
+                        "dop": dop,
+                        "time": time,
+                        "vertices": vertices,
+                        "edges": edges,
+                    }
+                    list_info.append(info)
+                    logical_plan_to_times[custom_logical_plan].append(time)
+                else:
+                    timeouted_logical_plans_to_dops[custom_logical_plan].add(dop)
+                    timeouted_logical_plans_to_settings[custom_logical_plan].append((dop, hintset))
 
+        for custom_logical_plan in timeouted_logical_plans_to_settings:
+            if custom_logical_plan in logical_plan_to_times:
+                time = torch.mean(torch.stack(logical_plan_to_times[custom_logical_plan]))
+            else:
+                max_def_time = 0.0
+                for dop in timeouted_logical_plans_to_dops[custom_logical_plan]:
+                    def_request = OracleRequest(query_name=query_name, hintset=DEFAULT_HINTSET, dop=dop)
+                    def_time = oracle.get_execution_time(request=def_request)
+                    max_def_time = max(max_def_time, def_time)
+                time = torch.tensor(2 * max_def_time / 1000, dtype=torch.float32)
 
-def featurize_dataset(
-    dataset: "WeightedBinaryTreeDataset",
-    model: "BinaryTreeRegressor",
-    train_structures: "Set[str]",
-    train_trees: "Set[str]",
-    data_type: "str",
-) -> "pd.DataFrame":
-    df = pd.DataFrame(iter(dataset), columns=["vertices", "edges", "frequency", "time"])
-    df["data_type"] = data_type
+            for dop, hintset in timeouted_logical_plans_to_settings[custom_logical_plan]:
+                custom_request = OracleRequest(query_name=query_name, hintset=hintset, dop=dop)
+                vertices, edges = extract_vertices_and_edges(oracle.get_explain_plan(request=custom_request))
+                timeouted_info: "QueryInfo" = {
+                    "query_name": query_name,
+                    "hintset": hintset,
+                    "dop": dop,
+                    "time": time,
+                    "vertices": vertices,
+                    "edges": edges,
+                }
 
-    df["time_category"] = "small"
-    df.loc[df["time"] > 0.2, "time_category"] = "medium"
-    df.loc[df["time"] > 4, "time_category"] = "big"
+                list_info.append(timeouted_info)
 
-    df["structure"] = df.apply(lambda row: get_structure(*preprocess(row["vertices"], row["edges"])), axis=1)
-    df["structure_category"] = "unseen"
-    df.loc[df["structure"].isin(train_structures), "structure_category"] = "seen"
-
-    df["tree"] = df.apply(lambda row: get_tree(*preprocess(row["vertices"], row["edges"])), axis=1)
-    df["tree_category"] = "unseen"
-    df.loc[df["tree"].isin(train_trees), "tree_category"] = "seen"
-
-    with torch.no_grad():
-        df["embedding"] = df.apply(
-            lambda row: model.btcnn(*[t.unsqueeze(0) for t in preprocess(row["vertices"], row["edges"])])
-            .squeeze(0)
-            .to("cpu"),
-            axis=1,
-        )
-        df["prediction"] = df.apply(
-            lambda row: model(*[t.unsqueeze(0) for t in preprocess(row["vertices"], row["edges"])]).to("cpu"), axis=1
-        )
-
-    for col in ["prediction", "frequency", "time"]:
-        df[col] = df.apply(lambda row, col=col: row[col].item(), axis=1)
-
-    df["error"] = df["prediction"] - df["time"]
-    df["prediction_category"] = "underestimated"
-    df.loc[df["error"] > 0, "prediction_category"] = "overestimated"
-
-    return df
-
-
-def filter_df(
-    df: "pd.DataFrame",
-    params: "Dict[str, str]",
-) -> "pd.DataFrame":
-    idx = df["data_type"] == params["data_type"]
-    if params.get("structure", "all") != "all":
-        idx = idx & (df["structure_category"] == params["structure"])
-    if params.get("tree", "all") != "all":
-        idx = idx & (df["tree_category"] == params["tree"])
-    if params.get("time", "all") != "all":
-        idx = idx & (df["time_category"] == params["time"])
-    if params.get("prediction", "all") != "all":
-        idx = idx & (df["prediction_category"] == params["prediction"])
-    return df.loc[idx]
+    return list_info
