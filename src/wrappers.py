@@ -96,8 +96,8 @@ def _get_planning_time(q_n: "QueryName", hs: "HintsetCode", dop: "QueryDop") -> 
 
 
 @lru_cache(None)
-def _get_e2e_time(q_n: "QueryName", hs: "HintsetCode", dop: "QueryDop") -> "Time":
-    return _get_execution_time(q_n, hs, dop) + _get_planning_time(q_n, hs, dop)
+def _get_e2e_time(q_n: "QueryName", hs: "HintsetCode", dop: "QueryDop", handle_timeout: "bool" = True) -> "Time":
+    return _get_execution_time(q_n, hs, dop, handle_timeout) + _get_planning_time(q_n, hs, dop)
 
 
 @lru_cache(None)
