@@ -1,3 +1,5 @@
+"""Standard RDBMS parameters and settings"""
+
 from typing import Dict, List
 from src.datasets.data_types import Hint, HintsetCode, QueryDop, GUC
 
@@ -23,6 +25,7 @@ GUCS: "List[GUC]" = [
 ]
 
 DEFAULT_HINTSET: "HintsetCode" = 0
+DEFAULT_DOP: "QueryDop" = 64
 
 DOPS: "List[QueryDop]" = [1, 16, 64]
 HINTSETS: "List[HintsetCode]" = list(range(2 ** len(HINTS)))

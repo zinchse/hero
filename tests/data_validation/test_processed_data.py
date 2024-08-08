@@ -8,21 +8,19 @@ from src.datasets.data_types import Plans
 
 
 PATH_TO_DATASET = "data/processed"
-EXPECTED_BENCHS = BENCH_NAMES
 EXPECTED_QUERY_DATA_SIZE = len(DOPS) * len(HINTSETS)
-BENCH_NAME_TO_EXPECTED_SIZE = BENCH_NAME_TO_SIZE
 
 
-@pytest.mark.parametrize("bench_name", EXPECTED_BENCHS)
+@pytest.mark.parametrize("bench_name", BENCH_NAMES)
 def test_existence(bench_name: str):
     assert bench_name in os.listdir(PATH_TO_DATASET), f"Can't find {bench_name} dataset at {PATH_TO_DATASET}"
 
 
-@pytest.mark.parametrize("bench_name", EXPECTED_BENCHS)
+@pytest.mark.parametrize("bench_name", BENCH_NAMES)
 def test_stucture(bench_name: str):
     path_to_bench = f"{PATH_TO_DATASET}/{bench_name}"
 
-    expected_bench_size = BENCH_NAME_TO_EXPECTED_SIZE[bench_name]
+    expected_bench_size = BENCH_NAME_TO_SIZE[bench_name]
     found_sqls = [f for f in os.listdir(path_to_bench) if f.endswith(".json")]
     assert (
         len(found_sqls) == expected_bench_size

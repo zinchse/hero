@@ -1,3 +1,13 @@
+"""
+A basic wrapper over the data, allowing, by specifying the query and the parameters used, 
+to get almost any necessary information about its behaviour:
+- explain plan,
+- explain analyze plan,
+- execution time,
+- planning time,
+- template_id, and so on
+"""
+
 import os
 from json import load
 from typing import Optional, Dict
@@ -8,6 +18,7 @@ from src.datasets.data_types import (
     HintsetCode,
     QueryData,
     Time,
+    Cost,
     ExplainAnalyzePlan,
     ExplainPlan,
     Plans,
@@ -19,8 +30,6 @@ TIMEOUT = float(2**42)
 def _load_benchmark_data(path_to_bench: "str") -> "Dict[QueryName, QueryData]":
     benchmark_data = {}
     for file_name in os.listdir(path_to_bench):
-        if file_name.startswith("."):
-            continue
         query_name = file_name.split(".")[0]
         with open(f"{path_to_bench}/{file_name}", "r") as query_file:
             query_data = load(query_file)
@@ -44,13 +53,17 @@ class Oracle:
         return list(self.benchmark_data.keys())
 
     def _get_plans(self, request: "OracleRequest") -> "Plans":
-        assert request.query_name in self.benchmark_data, "Unknown query {query_name}"
+        assert request.query_name in self.benchmark_data, f"Unknown query {request.query_name}"
         settings = str((request.dop, request.hintset))
         return self.benchmark_data[request.query_name][settings]
 
     def get_planning_time(self, request: "OracleRequest") -> "Time":
         plans = self._get_plans(request=request)
         return plans.explain_plan.planning_time
+
+    def get_cost(self, request: "OracleRequest") -> "Cost":
+        plans = self._get_plans(request=request)
+        return plans.explain_plan.plan.cost
 
     def get_execution_time(self, request: "OracleRequest") -> "Time":
         plans = self._get_plans(request=request)
