@@ -31,7 +31,6 @@ class Report(TypedDict):
     opt_ex: "float"
     opt_inference: "float"
     opt_e2e: "float"
-    degradations: "float"
     n_timeouts: "int"
     predictions: "List[Tuple[QueryName, HintsetCode, QueryDop]]"
     boosts: "List[float]"
@@ -61,7 +60,6 @@ def get_report(
         "opt_ex": 0.0,
         "opt_inference": 0.0,
         "opt_e2e": 0.0,
-        "degradations": 0.0,
         "n_timeouts": 0,
         "predictions": [],
         "boosts": [],
@@ -89,7 +87,6 @@ def get_report(
         )
         report["n_timeouts"] += _get_execution_time(q_n, hs, dop, handle_timeout=False) == TIMEOUT / 1000
     report["custom_e2e"] = report["custom_ex"] + report["custom_inference"]
-    report["degradations"] = sum(v for v in report["boosts"] if v < 0)
 
     return report
 
@@ -105,12 +102,13 @@ def emulate_online_learning(
     epochs: "int" = 300,
     n_runs: "int" = 10,
     path_to_save: "Optional[str]" = None,
+    device: "torch.device" = torch.device("cpu"),
 ) -> "List[Report]":
     reports = []
     model = NN(
         fit_settings=EMPTY_SS,
         inference_settings=ss,
-        model=get_bt_regressor("dummy_nn", torch.device("cpu")),
+        model=get_bt_regressor("dummy_nn", device),
         path_to_save=path_to_save,
     )
 
