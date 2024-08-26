@@ -1,0 +1,5 @@
+Benchmark,DOP,DOP,DOP,DOP,DOP,OPs,OPs,OPs,OPs,OPs,OPs & DOP,OPs & DOP,OPs & DOP,OPs & DOP,OPs & DOP
+,# Plans,# Unique Plans,# Unique Trees,E2E Time (sec),Planning Time (sec),# Plans,# Unique Plans,# Unique Trees,E2E Time (sec),Planning Time (sec),# Plans,# Unique Plans,# Unique Trees,E2E Time (sec),Planning Time (sec)
+TPCH,66,35,35,1492,0,2816,415,415,61156,9,8448,600,599,182477,24
+JOB,339,215,206,1445,263,14464,4167,3837,58468,7510,43392,7692,7050,172378,21337
+SQ,120,97,95,2002,157,5120,2162,2064,75048,4804,15360,4524,4271,223740,13109
