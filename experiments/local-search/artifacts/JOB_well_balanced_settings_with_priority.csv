@@ -1,6 +1,6 @@
-Bench,Beta,Boost (% of optimum),Learning Time (sec),Visited States,Visited Plans,`disable_joins`,`disable_scans`,`decrease_dop`,`use_joined_search`,`disable_inl`,`relative_boost_threshold`,`max_iter`,`avoid_duplicates`
-JOB,0.1,93.4,211.8,113/43392,113/7692,True,True,True,True,True,1.0,1.0,False
-JOB,0.2,93.4,211.8,113/43392,113/7692,True,True,True,True,True,1.0,1.0,False
-JOB,1.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
-JOB,2.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
-JOB,10.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
+Beta,Boost (% of optimum),Learning Time (sec),Visited States,Visited Plans,`disable_joins`,`disable_scans`,`decrease_dop`,`use_joined_search`,`disable_inl`,`relative_boost_threshold`,`max_iter`,`avoid_duplicates`
+0.1,93.4,211.8,113/43392,113/7692,True,True,True,True,True,1.0,1.0,False
+0.2,93.4,211.8,113/43392,113/7692,True,True,True,True,True,1.0,1.0,False
+1.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
+2.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
+10.0,98.5,399.0,477/43392,234/7692,True,True,True,True,True,1.0,inf,True
