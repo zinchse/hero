@@ -1,0 +1,17 @@
+`disable_scans`,`disable_joins`,`decrease_dop`,`disable_inl`,`use_joined_search`,E2E Time (sec),Boost (% of optimum),Learning Time (sec)
+True,False,False,False,False,386.8,67.2,4074.1
+False,True,False,False,False,311.1,80.5,3252.5
+True,True,False,False,False,283.5,85.4,7702.3
+False,False,False,True,False,539.1,40.5,1308.8
+False,False,True,False,False,488.5,49.4,1836.6
+True,False,True,False,False,351.3,73.4,5593.8
+False,True,True,False,False,288.0,84.6,4795.5
+True,True,True,False,False,267.4,88.2,9157.8
+False,False,True,True,False,340.2,75.4,2606.5
+False,True,True,True,False,266.4,88.4,5306.1
+True,True,True,True,False,244.0,92.3,9030.3
+True,True,True,False,True,241.8,92.7,16978.9
+False,False,True,True,True,332.1,76.8,2961.5
+False,True,True,False,True,271.3,87.5,7107.7
+False,True,True,True,True,243.5,92.4,7974.9
+True,True,True,True,True,233.9,94.1,15668.9

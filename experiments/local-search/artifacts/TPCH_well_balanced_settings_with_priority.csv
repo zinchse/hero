@@ -1,0 +1,6 @@
+Bench,Beta,Boost (% of optimum),Learning Time (sec),Visited States,Visited Plans,`disable_joins`,`disable_scans`,`decrease_dop`,`use_joined_search`,`disable_inl`,`relative_boost_threshold`,`max_iter`,`avoid_duplicates`
+TPCH,0.1,98.7,377.9,22/8448,22/600,True,True,True,True,False,1.0,1.0,False
+TPCH,0.2,98.7,377.9,22/8448,22/600,True,True,True,True,False,1.0,1.0,False
+TPCH,1.0,100.0,464.2,56/8448,26/600,True,True,True,True,False,1.0,inf,True
+TPCH,2.0,100.0,464.2,56/8448,26/600,True,True,True,True,False,1.0,inf,True
+TPCH,10.0,100.0,464.2,56/8448,26/600,True,True,True,True,False,1.0,inf,True
