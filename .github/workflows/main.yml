@@ -1,0 +1,59 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: installing python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: updating submodules
+      run: |
+        git submodule update --init --recursive
+        git submodule update --remote --merge
+
+    - name: installing dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: raw data extracting
+      run: |
+        cd hbo_bench
+        sudo apt-get install -y p7zip-full
+        7za x data/raw/raw_data.7z -odata/raw
+        cd ..
+    
+    - name: raw data processing
+      run: |
+        cd hbo_bench
+        python3 process_raw_data.py
+        cd ..
+
+    - name: formatting
+      run: |
+        black --check --line-length 120 .
+
+    - name: type checking
+      run: |
+        mypy .
+
+    - name: linting
+      run: |
+        pylint **/*.py
+
+    - name: testing
+      run: | 
+        pytest --cov=. --cov-report=xml
+
+    - name: uploading coverage badge
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}  
