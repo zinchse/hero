@@ -12,7 +12,7 @@ from hbo_bench.local_search_settings import EMPTY_SS
 from hbo_bench.oracle import TIMEOUT
 from hbo_bench.data_config import HINTSETS, DOPS, DEFAULT_HINTSET, DEFAULT_DOP
 from predictor import Predictor
-from neural_network import NN
+from neural_network import NN, get_bt_regressor
 from wrappers import _get_e2e_time, _get_execution_time, _get_planning_time
 
 
@@ -108,6 +108,7 @@ def emulate_online_learning(
         fit_settings=EMPTY_SS,
         inference_settings=ss,
         path_to_save=path_to_save,
+        model=get_bt_regressor("unknown.pth", device=device),
     )
 
     if with_default_data:

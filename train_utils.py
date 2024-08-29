@@ -20,7 +20,7 @@ DEFAULT_BATCH_SIZE = 256
 
 
 def load_model(device: "torch.device", path: "str", model: "BinaryTreeRegressor") -> "BinaryTreeRegressor":
-    ckpt_state = torch.load(path, map_location=device)
+    ckpt_state = torch.load(path, map_location=device, weights_only=True)
     model.load_state_dict(ckpt_state["model_state_dict"])
     model = model.to(device)
     model.device = device

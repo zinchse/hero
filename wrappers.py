@@ -103,7 +103,7 @@ def _get_logical_tree(q_n: "QueryName", hs: "HintsetCode", dop: "QueryDop", with
 
 @lru_cache(None)
 def _get_full_plan(q_n: "QueryName", hs: "HintsetCode", dop: "QueryDop", with_rels: "bool" = True) -> "str":
-    return get_full_plan(_get_explain_plan(q_n, hs, dop), with_rels=with_rels)
+    return get_full_plan(_get_explain_plan(q_n, hs, dop), with_rels=with_rels)  # pragma: nocover
 
 
 @lru_cache(None)
