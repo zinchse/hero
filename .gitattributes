@@ -1,3 +1,4 @@
+*.ipynb linguist-vendored
 experiments/justification/artifacts/job_list_info filter=lfs diff=lfs merge=lfs -text
 experiments/justification/artifacts/ood_sq_list_info filter=lfs diff=lfs merge=lfs -text
 experiments/justification/artifacts/id_sq_list_info filter=lfs diff=lfs merge=lfs -text
