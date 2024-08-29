@@ -1,2 +1,7 @@
 -r btcnn/requirements.txt
 -r hbo_bench/requirements.txt
+
+coverage==7.6.1
+coverage-badge==1.1.2
+scipy==1.14.1
+umap-learn==0.5.6
