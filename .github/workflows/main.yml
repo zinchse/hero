@@ -43,7 +43,7 @@ jobs:
 
     - name: type checking
       run: |
-        mypy .
+        mypy . --explicit-package-bases
 
     - name: linting
       run: |
