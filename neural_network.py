@@ -104,7 +104,7 @@ class NN(Predictor):
     ):
         super().__init__(fit_settings, inference_settings, execution_model)
         if model is None:
-            model = get_bt_regressor("unknown.pth", torch.device("cpu"))
+            model = get_bt_regressor("unknown.pth", torch.device("cpu"))  # pragma: nocover
         self.model = model
         self.path_to_save = path_to_save
         self._lr = lr
