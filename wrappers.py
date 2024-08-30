@@ -14,7 +14,6 @@ Functions:
 - many wrappers for getting `execution_time`, `e2e_time`, `logical_tree` and so on
 """
 
-import os
 from typing import List, Dict, Tuple
 import numpy as np
 import torch
