@@ -43,11 +43,11 @@ jobs:
 
     - name: type checking
       run: |
-        mypy . --explicit-package-bases
+        mypy *.
 
     - name: linting
       run: |
-        pylint **/*.py
+        pylint *.py
 
     - name: testing
       run: | 
