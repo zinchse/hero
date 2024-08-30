@@ -14,6 +14,7 @@ Functions:
 - many wrappers for getting `execution_time`, `e2e_time`, `logical_tree` and so on
 """
 
+from functools import lru_cache
 from typing import List, Dict, Tuple
 import numpy as np
 import torch
@@ -27,7 +28,6 @@ from hbo_bench.utils import (
     preprocess,
     extract_list_info,
 )
-from functools import lru_cache
 from hbo_bench.data_types import QueryName, QueryDop, HintsetCode, Cardinality, Selectivity, Time, ExplainPlan
 from hbo_bench.data_config import DEFAULT_DOP, DEFAULT_HINTSET
 from hbo_bench.oracle import Oracle, OracleRequest, TIMEOUT
