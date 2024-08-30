@@ -2,7 +2,6 @@ import os
 import sys
 
 ROOT_PATH = os.path.abspath(os.getcwd())
-print(ROOT_PATH)
 HBO_BENCH_PATH = os.path.join(ROOT_PATH, "hbo_bench/src/hbo_bench")
 sys.path.insert(0, ROOT_PATH)
 
