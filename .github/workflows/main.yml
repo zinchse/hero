@@ -28,10 +28,8 @@ jobs:
 
     - name: raw data extracting
       run: |
-        cd hbo_bench
         sudo apt-get install -y p7zip-full
-        7za x data/raw/raw_data.7z -odata/raw
-        cd ..
+        7za x hbo_bench/src/hbo_bench/data/raw/raw_data.7z -ohbo_bench/src/hbo_bench/data/raw
     
     - name: raw data processing
       run: |
