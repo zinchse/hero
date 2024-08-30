@@ -10,17 +10,24 @@ By default the most successful model is used - a big convolutional network with 
 from typing import Optional, List, Tuple, Set
 from heapq import heappop, heappush
 import torch
-from torch import Tensor
-from torch import nn
+from torch import Tensor, nn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 from hbo_bench.oracle import Oracle
 from hbo_bench.utils import extract_vertices_and_edges, MAX_TREE_LENGTH
 from hbo_bench.dataset import WeightedBinaryTreeDataset, weighted_binary_tree_collate
 from hbo_bench.data_types import Time, QueryName, Parameter, QueryDop, HintsetCode
-from predictor import Predictor
-from btcnn.regressor import BinaryTreeRegressor
+from hbo_bench.vectorization import ALL_FEATURES
 from hbo_bench.query_explorer import QueryExplorer, SearchingSettings, SearchingState
+from btcnn.regressor import BinaryTreeRegressor
+from btcnn.layers import (
+    BinaryTreeSequential,
+    BinaryTreeActivation,
+    BinaryTreeConv,
+    BinaryTreeInstanceNorm,
+    BinaryTreeAdaptivePooling,
+)
+from predictor import Predictor
 from wrappers import (
     _get_oracle,
     _get_prediction,
@@ -31,15 +38,7 @@ from wrappers import (
     _get_explain_plan,
 )
 from train_utils import weighted_train_loop, set_seed, DEFAULT_LR, DEFAULT_BATCH_SIZE
-from torch import nn, Tensor
-from hbo_bench.vectorization import ALL_FEATURES
-from btcnn.layers import (
-    BinaryTreeSequential,
-    BinaryTreeActivation,
-    BinaryTreeConv,
-    BinaryTreeInstanceNorm,
-    BinaryTreeAdaptivePooling,
-)
+
 
 IN_CHANNELS = len(ALL_FEATURES)
 
