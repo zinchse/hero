@@ -1,6 +1,0 @@
-Beta,Boost (% of optimum),Learning Time (sec),Visited States,Visited Plans,`disable_joins`,`disable_scans`,`decrease_dop`,`use_joined_search`,`disable_inl`,`relative_boost_threshold`,`max_iter`,`avoid_duplicates`
-0.1,90.4,254.6,40/15360,40/4524,True,True,True,True,True,1.0,1.0,False
-0.2,90.4,254.6,40/15360,40/4524,True,True,True,True,True,1.0,1.0,False
-1.0,93.4,371.1,79/15360,68/4524,True,True,True,True,True,1.0,2.0,True
-2.0,94.1,495.5,156/15360,94/4524,True,True,True,True,True,1.0,inf,True
-10.0,94.1,495.5,156/15360,94/4524,True,True,True,True,True,1.0,inf,True
