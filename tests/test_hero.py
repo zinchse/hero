@@ -1,8 +1,8 @@
 from typing import Dict
 from hbo_bench.oracle import Oracle
 from hbo_bench.local_search_settings import PRUNED_GREEDY_SS, PRUNED_LOCAL_SS, EMPTY_SS
-from hero import Hero
-from wrappers import _get_execution_time, _get_e2e_time
+from hero.hero import Hero
+from hero.wrappers import _get_execution_time, _get_e2e_time
 
 
 def test_superiority_of_local_strategy(oracles_dict: "Dict[str, Oracle]"):

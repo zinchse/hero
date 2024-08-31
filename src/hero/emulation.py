@@ -11,9 +11,9 @@ from hbo_bench.query_explorer import SearchingSettings
 from hbo_bench.local_search_settings import EMPTY_SS
 from hbo_bench.oracle import TIMEOUT
 from hbo_bench.data_config import HINTSETS, DOPS, DEFAULT_HINTSET, DEFAULT_DOP
-from predictor import Predictor
-from neural_network import NN, get_bt_regressor
-from wrappers import _get_e2e_time, _get_execution_time, _get_planning_time
+from hero.predictor import Predictor
+from hero.neural_network import NN, get_bt_regressor
+from hero.wrappers import _get_e2e_time, _get_execution_time, _get_planning_time
 
 
 class Report(TypedDict):

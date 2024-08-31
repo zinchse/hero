@@ -15,14 +15,14 @@ time of the greedy (which suffers because of the need for sequential planning ca
 
 from typing import Tuple, Optional, List
 from functools import lru_cache
-from predictor import Predictor
 from hbo_bench.data_types import Parameter, Time, QueryName, HintsetCode, QueryDop
 from hbo_bench.data_config import DEFAULT_DOP, DEFAULT_HINTSET
 from hbo_bench.local_search_settings import SearchingSettings
 from hbo_bench.query_explorer import QueryExplorer
-from storage import Storage, Node, Transition
 from btcnn.regressor import BinaryTreeRegressor
-from wrappers import (
+from hero.storage import Storage, Node, Transition
+from hero.predictor import Predictor
+from hero.wrappers import (
     _get_oracle,
     _get_planning_time,
     _get_e2e_time,

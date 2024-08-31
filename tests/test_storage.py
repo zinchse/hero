@@ -1,4 +1,4 @@
-from storage import Storage, Node, Transition, Parameter, DISTANCE_THRESHOLD
+from hero.storage import Storage, Node, Transition, Parameter, DISTANCE_THRESHOLD
 import pytest
 
 EPS = 1e-10

@@ -1,5 +1,4 @@
 [MASTER]
-init-hook='import sys; sys.path.insert(0, ".")'
 disable=C0115, W1514, C0116, W0621, C0413, C0411, R0913, R0914, R0902
 ignore=venv,.venv
 

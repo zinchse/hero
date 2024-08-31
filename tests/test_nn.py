@@ -2,8 +2,8 @@ import pytest
 import torch
 from hbo_bench.data_types import QueryName
 from hbo_bench.local_search_settings import ALL_SS, PRUNED_LOCAL_SS
-from wrappers import _get_e2e_time, _get_execution_time
-from neural_network import NN, get_bt_regressor
+from hero.wrappers import _get_e2e_time, _get_execution_time
+from hero.neural_network import NN, get_bt_regressor
 
 
 @pytest.fixture

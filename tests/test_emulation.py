@@ -1,10 +1,10 @@
 from typing import Dict
 import torch
-from emulation import emulate_online_learning, get_report
 from hbo_bench.oracle import Oracle
 from hbo_bench.local_search_settings import PRUNED_LOCAL_DEF_DOP_SS, ALL_DEF_DOP_SS, EMPTY_SS
-from neural_network import NN, get_bt_regressor
-from train_utils import load_model
+from hero.neural_network import NN, get_bt_regressor
+from hero.train_utils import load_model
+from hero.emulation import emulate_online_learning, get_report
 
 
 def test_smoke(oracles_dict: "Dict[str, Oracle]") -> "None":

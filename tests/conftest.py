@@ -1,14 +1,11 @@
 import os
-import sys
-
-ROOT_PATH = os.getcwd()
-HBO_BENCH_PATH = os.path.join(ROOT_PATH, "hbo_bench/src/hbo_bench")
-sys.path.insert(0, ROOT_PATH)
-
 from typing import Dict
 import pytest
 from hbo_bench.oracle import Oracle
-from wrappers import ORACLES_DICT, initialize_oracles
+from hero.wrappers import ORACLES_DICT, initialize_oracles
+
+ROOT_PATH = os.getcwd()
+HBO_BENCH_PATH = os.path.join(ROOT_PATH, "hbo_bench/src/hbo_bench")
 
 
 @pytest.fixture(scope="session", autouse=True)

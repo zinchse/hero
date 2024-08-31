@@ -27,8 +27,8 @@ from btcnn.layers import (
     BinaryTreeInstanceNorm,
     BinaryTreeAdaptivePooling,
 )
-from predictor import Predictor
-from wrappers import (
+from hero.predictor import Predictor
+from hero.wrappers import (
     _get_oracle,
     _get_prediction,
     _get_processed_v_e,
@@ -37,7 +37,7 @@ from wrappers import (
     _get_execution_time,
     _get_explain_plan,
 )
-from train_utils import weighted_train_loop, set_seed, DEFAULT_LR, DEFAULT_BATCH_SIZE
+from hero.train_utils import weighted_train_loop, set_seed, DEFAULT_LR, DEFAULT_BATCH_SIZE
 
 
 IN_CHANNELS = len(ALL_FEATURES)
