@@ -22,9 +22,9 @@ jobs:
     - name: installing dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
         pip install -e btcnn
         pip install -e hbo_bench
+        pip install -e .
 
     - name: raw data extracting
       run: |
@@ -43,7 +43,7 @@ jobs:
 
     - name: type checking
       run: |
-        mypy *.py
+        mypy src/hero
 
     - name: linting
       run: |
