@@ -1,2 +1,3 @@
 [run]
-omit = hbo_bench/*, btcnn/*
+omit = hbo_bench/*, btcnn/*, setup.py
+
