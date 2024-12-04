@@ -2,14 +2,14 @@
   <img src="https://github.com/user-attachments/assets/d798e5f9-5b10-43f3-b00c-8e29be47c39d" alt="Иллюстрация" width="300">
 </div>
 
-[![codecov](https://codecov.io/gh/zinchse/hero/graph/badge.svg?token=R4WRFFQUZL)](https://codecov.io/gh/zinchse/hero)
+[![codecov](https://codecov.io/gh/zinchse/hero/graph/badge.svg?token=R4WRFFQUZL)](https://codecov.io/gh/zinchse/hero) [![arXiv](https://img.shields.io/badge/arXiv-2412.02372-B31B1B.svg)](https://arxiv.org/abs/2412.02372)
 # HERO: New learned Hint-based Efficient and Reliable query Optimizer.
 
 **Key features:** extended search space, virtually optimal performance, fast inference time (`x5-x40` faster than existing solutions), quick and flexible learning stage and transparent and interpretable predictive model instead of black-box NN.
 
 # 🔬 Method
 
-Here will be details about hbo_bench, btcnn, graph storage, query explorer, predictor's logic and artifacts from experiments ...
+Here will be details about `hbo_bench`, `btcnn`, graph storage, query explorer, predictor's logic and artifacts from experiments ...
 
 # 📦 Setup
 
