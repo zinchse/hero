@@ -1,5 +1,8 @@
-[![codecov](https://codecov.io/gh/zinchse/hero/graph/badge.svg?token=R4WRFFQUZL)](https://codecov.io/gh/zinchse/hero)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/d798e5f9-5b10-43f3-b00c-8e29be47c39d" alt="Иллюстрация" width="300">
+</div>
 
+[![codecov](https://codecov.io/gh/zinchse/hero/graph/badge.svg?token=R4WRFFQUZL)](https://codecov.io/gh/zinchse/hero)
 # HERO: New learned Hint-based Efficient and Reliable query Optimizer.
 
 **Key features:** extended search space, virtually optimal performance, fast inference time (`x5-x40` faster than existing solutions), quick and flexible learning stage and transparent and interpretable predictive model instead of black-box NN.
@@ -72,7 +75,15 @@ cd ..
 # ❛❛❞ Citation
 
 ```latex
-citation will be added later
+@misc{zinchenko2024herohintbasedefficientreliable,
+      title={HERO: Hint-Based Efficient and Reliable Query Optimizer}, 
+      author={Sergey Zinchenko and Sergey Iazov},
+      year={2024},
+      eprint={2412.02372},
+      archivePrefix={arXiv},
+      primaryClass={cs.DB},
+      url={https://arxiv.org/abs/2412.02372}, 
+}
 ```
 
 
